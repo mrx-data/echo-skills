@@ -6,9 +6,9 @@
 
 ## Skills
 
-| Name | Category | Description |
-|------|----------|-------------|
-| [agent-memory-pack](skills/software-development/agent-memory-pack/SKILL.md) | software-development | Portable Agent Memory Pack 管理——跨平台、跨 Agent 的可移植记忆包 |
+| Name | Description |
+|------|-------------|
+| [agent-memory-pack](agent-memory-pack/SKILL.md) | Portable Agent Memory Pack 管理——跨平台、跨 Agent 的可移植记忆包 |
 
 ## 安装
 
