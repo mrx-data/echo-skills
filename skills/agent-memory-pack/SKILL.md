@@ -13,7 +13,7 @@ license: MIT
 metadata:
   hermes:
     tags: [memory, handoff, cross-agent, portable, knowledge-management]
-    related_skills: [neat-freak, hermes-agent]
+    related_skills: [hermes-agent]
 ---
 
 # Portable Agent Memory Pack 管理
@@ -411,13 +411,4 @@ Avoid repeating these patterns.
 | 不记录噪音 | 聊天全文、临时情绪、一次性输出、已过期假设 |
 | 有变更必报告 | 每个文件都出现在变更报告中 |
 
-## 与 neat-freak 的区别
 
-本 skill 专注于 **Portable Agent Memory Pack** 的管理——一个独立的、跨平台的记忆文件夹。
-
-neat-freak 是更广泛的**项目知识库清理**技能，涵盖：
-- 项目 `docs/`、`README.md`、`CLAUDE.md` 的审查同步
-- 平台私有记忆（Claude Code memory、Hermes memory）的清理
-- 跨项目文档对齐
-
-本 skill 只管记忆包，neat-freak 管所有。neat-freak 在收尾时会调用本 skill 的逻辑来维护记忆包。
