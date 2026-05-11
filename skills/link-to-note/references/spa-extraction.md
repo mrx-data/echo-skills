@@ -1,80 +1,60 @@
-# SPA / JS-Rendered Page Extraction Fallback
+# SPA / JS 渲染页面的内容提取
 
-## Problem
+## 问题
 
-Some web platforms render content dynamically via JavaScript — the raw HTML returned by `curl` is just a framework shell (~15-20KB of `<script>` tags and a spinner). The content exists only after the JS bundle executes in a browser.
+`curl` 下载的 HTML 仅包含 JS 骨架（`<script>` 标签 + CSS），正文通过客户端 JS 异步渲染。常见于：
 
-**Known SPA offenders:**
-- Notion public pages (`notion.site`)
-- WeChat Official Account articles (`mp.weixin.qq.com`)
-- Zhihu articles (partial — some content is server-rendered, some JS-only)
-- Medium (paywall / JS redirect)
+- Notion 公开页面
+- 微信公众号文章
+- 知乎
+- Medium
+- 各类 SPA（React/Vue/Angular 构建的站点）
 
-## Detection Heuristic
-
-After `curl` download:
+## 检测方法
 
 ```python
 import os
-html_path = f"/tmp/.ltn_page_{SLUG}.html"
-size = os.path.getsize(html_path)
-
-# Check for SPA signals
-with open(html_path) as f:
-    html = f.read()
-
-is_spa = (
-    size < 20000 or
-    '<div id="root">' in html or
-    'window.__INITIAL_STATE__' not in html and '<article' not in html and 'post-body' not in html
-)
+html_size = os.path.getsize(f"./.ltn_page_{slug}.html")
+if html_size < 20_000:
+    # 疑似 SPA — 检查是否包含正文关键词
+    with open(f"./.ltn_page_{slug}.html", 'r') as f:
+        preview = f.read(5000)
+    has_content = any(kw in preview for kw in ['<article', 'content', 'post-body', 'entry-content'])
+    if not has_content:
+        print("→ SPA detected, falling back to browser")
+        use_browser = True
 ```
 
-If `is_spa`, skip the `html.parser` extraction path and use browser-based extraction instead.
+## 浏览器提取流程
 
-## Browser-Based Extraction Workflow
-
-### Step 1: Navigate to the page
+### 1. 渲染页面
 
 ```
-browser_navigate(url="PAGE_URL")
+browser_navigate(url="<URL>")
 ```
 
-Wait for the page to finish loading (browser_navigate returns after the load event).
-
-### Step 2: Snapshot to verify content loaded
+### 2. 等待加载后获取快照（必要时）
 
 ```
-browser_snapshot(full=false)
+browser_snapshot(full=true)
 ```
 
-Check that the snapshot contains readable text (not just spinners or "Loading...").
-
-### Step 3: Extract text via console
+### 3. 提取纯文本（按站点类型选选择器）
 
 ```
-browser_console(expression="document.querySelector('.notion-page-content')?.innerText || document.querySelector('main')?.innerText || document.querySelector('article')?.innerText || document.body.innerText")
+browser_console(expression="document.querySelector('.notion-page-content')?.innerText || document.querySelector('main')?.innerText || document.body.innerText")
 ```
 
-**Platform-specific selectors:**
-| Platform | Preferred selector |
-|----------|-------------------|
+### 常用选择器
+
+| 站点 | 选择器 |
+|------|--------|
 | Notion | `.notion-page-content` |
-| WeChat | `#js_content` |
-| Zhihu | `.RichContent-inner` |
-| Generic | `main`, `article`, `[role="main"]` |
+| 微信公众号 | `#js_content` 或 `#img-content .rich_media_content` |
+| 知乎 | `.Post-RichTextContainer` 或 `.RichContent-inner` |
+| Medium | `article` |
+| 通用 | `main`, `article`, `[role="main"]` |
 
-### Step 4: Parse extracted text
+### 4. 将提取文本作为 content_text
 
-The text from `innerText` is already plain text (newlines preserved). Feed it directly into metadata extraction and note composition:
-
-```python
-content_text = browser_result  # already clean text
-TITLE = content_text.split('\n')[0][:80]  # First line is usually the title
-```
-
-No need for `html.parser` — the browser already did the rendering.
-
-## Session Record
-
-**2026-05-11:** First encountered with Notion page `https://mint-shell-712.notion.site/Hermes-Claude-Code-35b67d1468188152b481cecfe669ad57`. curl downloaded 17,527 bytes but all content was in JS bundles. Browser navigation + `document.querySelector('main')?.innerText` successfully extracted the full article text.
+提取到的纯文本直接作为 `content_text` 进入 Step 3 组织笔记，不需要再经过 html.parser。
