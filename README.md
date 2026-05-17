@@ -9,6 +9,7 @@
 | Name | Description |
 |------|-------------|
 | [agent-memory-pack](agent-memory-pack/SKILL.md) | Portable Agent Memory Pack 管理——跨平台、跨 Agent 的可移植记忆包 |
+| [obsidian-knowledge-distiller](skills/obsidian-knowledge-distiller/SKILL.md) | 将文章、视频、音频、播客或转录稿沉淀为详细清晰、可复用的 Obsidian 知识笔记 |
 
 ## 安装
 

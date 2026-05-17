@@ -1,0 +1,4 @@
+interface:
+  display_name: "Obsidian Knowledge Distiller"
+  short_description: "Turn sources into reusable Obsidian notes"
+  default_prompt: "Use $obsidian-knowledge-distiller to turn this article, video, or audio transcript into a detailed Obsidian knowledge note."
