@@ -16,6 +16,7 @@ Turn source material into a detailed Obsidian Markdown note that can be reused f
 - Do not invent source details. Mark missing or ambiguous items as `待核实`.
 - Prefer clear Chinese output when the user writes in Chinese, unless they request another language.
 - Use Obsidian `[[double links]]` for concepts, people, organizations, works, themes, and likely future notes.
+- Always include a `# 文档目录` section after frontmatter. The directory must list the note's major headings and meaningful subheadings, using Obsidian heading links such as `[[#核心摘要]]`.
 - If the user asks to save into a vault and the path is known, write a `.md` file. If the path is unknown, output the Markdown and ask for the vault path only if saving is required.
 - When another skill or tool has already extracted text, subtitles, or transcripts, start from that material and focus on distillation.
 
@@ -24,9 +25,10 @@ Turn source material into a detailed Obsidian Markdown note that can be reused f
 1. Identify the source type: article, video, audio/podcast, transcript, or mixed notes.
 2. Capture source metadata when available: title, author/channel/speaker, URL, publish date, duration, and access date.
 3. Choose the relevant source treatment below.
-4. Produce the standard note structure.
-5. Add atomic note candidates and Obsidian link suggestions.
-6. Run the quality checklist before finalizing.
+4. Produce the standard note structure with clear headings and subheadings.
+5. Generate or update `# 文档目录` after the final heading structure is known.
+6. Add atomic note candidates and Obsidian link suggestions.
+7. Run the quality checklist before finalizing.
 
 ## Source Treatments
 
@@ -73,6 +75,24 @@ tags:
 status: processed
 ---
 
+# 文档目录
+
+- [[#一句话概括]]
+- [[#核心摘要]]
+- [[#结构化梳理]]
+  - [[#背景 / 问题]]
+  - [[#主要观点]]
+  - [[#论证过程]]
+  - [[#案例 / 数据 / 故事]]
+  - [[#结论 / 限制]]
+- [[#关键概念]]
+- [[#重要细节与证据]]
+- [[#值得摘录的原句]]
+- [[#我的启发]]
+- [[#可链接笔记建议]]
+- [[#原子化笔记候选]]
+- [[#待核实]]
+
 # 一句话概括
 
 用一句话说明这份材料最核心的价值。
@@ -83,12 +103,17 @@ status: processed
 
 # 结构化梳理
 
-按照原内容的逻辑顺序拆解：
-1. 背景 / 问题
-2. 主要观点
-3. 论证过程
-4. 案例 / 数据 / 故事
-5. 结论 / 限制
+按照原内容的逻辑顺序拆解。使用二级标题保留文档层级，不要只写成无层级列表。
+
+## 背景 / 问题
+
+## 主要观点
+
+## 论证过程
+
+## 案例 / 数据 / 故事
+
+## 结论 / 限制
 
 # 关键概念
 
@@ -142,6 +167,8 @@ Add these sections only when useful:
 - `# 操作步骤`: for tutorials, demos, workflows, or technical material.
 - `# 反对意见与限制`: when the source is argumentative or controversial.
 
+When optional sections are added, update `# 文档目录` so it reflects the actual headings in the final note. For long optional sections, include their most useful `##` subheadings in the directory.
+
 ## File Writing
 
 When saving to Obsidian:
@@ -157,6 +184,7 @@ When saving to Obsidian:
 Before finalizing, verify:
 
 - The note is more detailed than a generic summary.
+- `# 文档目录` exists and includes both major headings and useful subheadings.
 - The reasoning path is preserved, not only the conclusion.
 - Facts, opinions, inferences, and uncertainties are separated.
 - Cases, examples, data, names, and frameworks are not silently dropped.
